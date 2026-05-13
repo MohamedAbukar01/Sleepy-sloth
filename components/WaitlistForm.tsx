@@ -5,11 +5,13 @@ import { useState } from "react";
 type Status = "idle" | "loading" | "success" | "already" | "error";
 
 export function WaitlistForm({
-  variant = "hero",
+  variant = "default",
   id,
+  source,
 }: {
-  variant?: "hero" | "band";
+  variant?: "default" | "compact";
   id?: string;
+  source?: string;
 }) {
   const [email, setEmail] = useState("");
   const [hp, setHp] = useState("");
@@ -26,7 +28,7 @@ export function WaitlistForm({
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, hp_field: hp }),
+        body: JSON.stringify({ email, hp_field: hp, source }),
       });
       const data = (await res.json()) as {
         ok?: boolean;
@@ -55,16 +57,16 @@ export function WaitlistForm({
     }
   }
 
-  const isBand = variant === "band";
   const inputId = id ?? `waitlist-${variant}`;
+  const isCompact = variant === "compact";
 
   return (
     <form
       onSubmit={handleSubmit}
       className={
-        isBand
-          ? "mx-auto flex w-full max-w-xl flex-col gap-3 sm:flex-row"
-          : "flex w-full max-w-md flex-col gap-3 sm:flex-row"
+        isCompact
+          ? "flex w-full max-w-md flex-col gap-2 sm:flex-row"
+          : "mx-auto flex w-full max-w-md flex-col gap-2 sm:flex-row"
       }
       aria-describedby={`${inputId}-status`}
       noValidate
@@ -78,13 +80,12 @@ export function WaitlistForm({
         required
         autoComplete="email"
         inputMode="email"
-        placeholder="you@cozy.email"
+        placeholder="Enter your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         disabled={status === "loading"}
-        className="w-full flex-1 rounded-full border border-night-700 bg-night-900/70 px-5 py-3 text-moon-100 placeholder:text-moon-100/40 focus:border-lavender-400 focus:outline-none focus:ring-2 focus:ring-lavender-400/40"
+        className="w-full flex-1 rounded-md border border-moon-100/20 bg-transparent px-4 py-2.5 text-sm text-moon-100 placeholder:text-moon-100/45 focus:border-moon-100/60 focus:outline-none focus:ring-1 focus:ring-moon-100/40"
       />
-      {/* Honeypot */}
       <input
         type="text"
         name="hp_field"
@@ -98,26 +99,22 @@ export function WaitlistForm({
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded-full bg-peach-300 px-6 py-3 font-medium text-night-950 transition hover:bg-peach-200 disabled:opacity-60"
+        className={`rounded-md px-5 py-2.5 text-sm font-medium transition disabled:opacity-60 ${
+          isCompact
+            ? "border border-moon-100/25 text-moon-100 hover:border-moon-100/60"
+            : "bg-moon-100 text-night-950 hover:bg-peach-200"
+        }`}
       >
-        {status === "loading" ? "Saving…" : "Save my spot"}
+        {status === "loading" ? "Saving…" : "Subscribe"}
       </button>
-
-      <p
-        id={`${inputId}-status`}
-        role="status"
-        aria-live="polite"
-        className={`sr-only ${status !== "idle" ? "not-sr-only sm:absolute sm:-bottom-7 sm:left-0 sm:text-sm" : ""}`}
-      >
-        {message}
-      </p>
 
       {status !== "idle" && status !== "loading" && (
         <p
-          className={`mt-1 w-full text-sm sm:mt-0 sm:basis-full ${
-            status === "error"
-              ? "text-peach-300"
-              : "text-moon-100/80"
+          id={`${inputId}-status`}
+          role="status"
+          aria-live="polite"
+          className={`mt-1 w-full text-xs sm:mt-0 sm:basis-full ${
+            status === "error" ? "text-peach-300" : "text-moss-300"
           }`}
         >
           {message}

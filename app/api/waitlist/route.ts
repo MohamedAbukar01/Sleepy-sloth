@@ -32,7 +32,10 @@ export async function POST(request: Request) {
   const supabase = getSupabaseAdmin();
   const { error } = await supabase
     .from("waitlist")
-    .insert({ email: parsed.data.email, source: "landing" });
+    .insert({
+      email: parsed.data.email,
+      source: parsed.data.source ?? "landing",
+    });
 
   if (error) {
     if (error.code === "23505") {

@@ -1,117 +1,194 @@
-type Feature = { label: string; free: boolean; premium: boolean };
+"use client";
 
-const features: Feature[] = [
-  { label: "Sam, the sloth companion", free: true, premium: true },
-  { label: "Bedtime + wind-down timer", free: true, premium: true },
-  { label: "Phone pickup detection", free: true, premium: true },
-  { label: "3 ambient sounds", free: true, premium: true },
-  { label: "Morning report letters", free: true, premium: true },
-  { label: "Full sound library (50+) and sleep stories", free: false, premium: true },
-  { label: "Smart alarm (wake during light sleep)", free: false, premium: true },
-  { label: "Partner sync — two sloths, one bed", free: false, premium: true },
-  { label: "Cozy World decorations and outfits", free: false, premium: true },
+import { useState } from "react";
+
+type Plan = "monthly" | "yearly";
+
+const free = [
+  "Sam's core experience",
+  "Bedtime tracking",
+  "Gentle notifications",
 ];
 
-export function Pricing() {
+const premium = [
+  "Sleep sounds library",
+  "Bedtime stories",
+  "Smart wake times",
+  "Device syncing",
+  "Sam cosmetics",
+];
+
+function Check() {
   return (
-    <section
-      id="pricing"
-      aria-labelledby="pricing-heading"
-      className="relative border-t border-night-800/60 bg-night-900/40"
-    >
-      <div className="mx-auto max-w-6xl px-6 py-20 md:py-24">
-        <div className="max-w-2xl">
-          <p className="mb-3 text-xs uppercase tracking-[0.18em] text-moss-300">
-            Pricing
-          </p>
-          <h2
-            id="pricing-heading"
-            className="font-display text-3xl leading-tight text-moon-100 sm:text-4xl md:text-5xl"
-          >
-            Generous free. Quiet premium.
-          </h2>
-          <p className="mt-4 text-moon-100/70">
-            The core mechanic is free forever. Premium adds sounds, stories,
-            partner sync, and seasonal cosmetics for Sam.
-          </p>
-        </div>
-
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {/* Free card */}
-          <div className="rounded-3xl border border-night-700/70 bg-night-900/70 p-8">
-            <h3 className="font-display text-2xl text-moon-100">Free</h3>
-            <p className="mt-1 text-sm text-moon-100/60">Everything you need to actually sleep.</p>
-            <div className="mt-6 flex items-baseline gap-2">
-              <span className="font-display text-5xl text-moon-100">$0</span>
-              <span className="text-moon-100/60">forever</span>
-            </div>
-            <ul className="mt-6 space-y-3 text-moon-100/80">
-              {features.filter((f) => f.free).map((f) => (
-                <li key={f.label} className="flex items-start gap-3">
-                  <Check className="text-moss-300" />
-                  <span>{f.label}</span>
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#waitlist"
-              className="mt-8 inline-flex w-full justify-center rounded-full border border-moon-100/30 px-5 py-3 text-moon-100 transition hover:border-moon-100/60"
-            >
-              Join the waitlist
-            </a>
-          </div>
-
-          {/* Premium card */}
-          <div className="relative rounded-3xl border border-peach-300/40 bg-gradient-to-b from-dusk-700/60 to-night-900/70 p-8">
-            <span className="absolute -top-3 left-8 rounded-full bg-peach-300 px-3 py-1 text-xs font-medium text-night-950">
-              Premium
-            </span>
-            <h3 className="font-display text-2xl text-moon-100">Cozy Plus</h3>
-            <p className="mt-1 text-sm text-moon-100/70">For nights you want a little softer.</p>
-            <div className="mt-6 flex items-baseline gap-2">
-              <span className="font-display text-5xl text-moon-100">$5.99</span>
-              <span className="text-moon-100/60">/ month</span>
-            </div>
-            <p className="mt-1 text-sm text-moon-100/60">or $39.99 / year &mdash; about 44% off.</p>
-            <ul className="mt-6 space-y-3 text-moon-100/85">
-              {features.map((f) => (
-                <li key={f.label} className="flex items-start gap-3">
-                  <Check className={f.premium ? "text-peach-300" : "text-moon-100/20"} />
-                  <span className={f.premium ? "" : "text-moon-100/40"}>
-                    {f.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#waitlist"
-              className="mt-8 inline-flex w-full justify-center rounded-full bg-peach-300 px-5 py-3 font-medium text-night-950 transition hover:bg-peach-200"
-            >
-              Get early access
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Check({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      className={`mt-1 h-4 w-4 flex-none ${className}`}
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
       <path
-        d="M6 10.5 L 9 13.5 L 14.5 7.5"
+        d="M3 7.5l3 3 5-6"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="3.5" y="5" width="17" height="15" rx="2.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M9 14.5l1.8 1.8L15 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MedalIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M8 3h8l-2 6h-4l-2-6z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <circle cx="12" cy="15" r="5.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M12 13l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2L9 15.2l2-.3z" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function Pricing() {
+  const [plan, setPlan] = useState<Plan>("monthly");
+
+  const premiumPrice = plan === "monthly" ? "$9/mo" : "$72/yr";
+  const premiumNote =
+    plan === "monthly" ? "Cancel any night." : "Save $36 a year.";
+
+  return (
+    <section
+      id="pricing"
+      aria-labelledby="pricing-heading"
+      className="relative border-b border-night-800/50 py-24 md:py-28"
+    >
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="text-center">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-moon-100/55">
+            Plans
+          </p>
+          <h2
+            id="pricing-heading"
+            className="mt-3 font-display text-4xl font-medium leading-tight tracking-tight text-moon-100 md:text-5xl"
+          >
+            Simple pricing
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-moon-100/65">
+            Start free. Upgrade only if you want more.
+          </p>
+
+          <div
+            role="tablist"
+            aria-label="Billing period"
+            className="mt-8 inline-flex rounded-md border border-moon-100/20 p-1"
+          >
+            <button
+              role="tab"
+              aria-selected={plan === "monthly"}
+              onClick={() => setPlan("monthly")}
+              className={`rounded px-5 py-1.5 text-sm transition ${
+                plan === "monthly"
+                  ? "bg-moon-100/10 text-moon-100"
+                  : "text-moon-100/65 hover:text-moon-100"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              role="tab"
+              aria-selected={plan === "yearly"}
+              onClick={() => setPlan("yearly")}
+              className={`rounded px-5 py-1.5 text-sm transition ${
+                plan === "yearly"
+                  ? "bg-moon-100/10 text-moon-100"
+                  : "text-moon-100/65 hover:text-moon-100"
+              }`}
+            >
+              Yearly
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <article className="flex flex-col rounded-2xl border border-moon-100/15 bg-night-900/40 p-8 md:p-10">
+            <header className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-moon-100">Free plan</p>
+                <p className="mt-6 font-display text-5xl font-medium tracking-tight text-moon-100 md:text-6xl">
+                  Free
+                </p>
+              </div>
+              <span className="text-moon-100/70">
+                <CalendarIcon />
+              </span>
+            </header>
+
+            <hr className="my-7 border-moon-100/10" />
+
+            <p className="text-sm text-moon-100/55">Includes</p>
+            <ul className="mt-3 space-y-3">
+              {free.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm text-moon-100/85">
+                  <span className="mt-0.5 text-moss-300">
+                    <Check />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex-1" />
+
+            <a
+              href="#sam-waiting"
+              className="mt-8 inline-flex items-center justify-center rounded-md bg-moon-100 px-4 py-3 text-sm font-medium text-night-950 transition hover:bg-peach-200"
+            >
+              Start free
+            </a>
+          </article>
+
+          <article className="relative flex flex-col rounded-2xl border border-moon-100/15 bg-night-900/40 p-8 md:p-10">
+            <header className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-moon-100">Premium plan</p>
+                <p className="mt-6 font-display text-5xl font-medium tracking-tight text-moon-100 md:text-6xl">
+                  {premiumPrice}
+                </p>
+                <p className="mt-2 text-xs text-moon-100/55">{premiumNote}</p>
+              </div>
+              <span className="text-peach-300">
+                <MedalIcon />
+              </span>
+            </header>
+
+            <hr className="my-7 border-moon-100/10" />
+
+            <p className="text-sm text-moon-100/55">Includes</p>
+            <ul className="mt-3 space-y-3">
+              {premium.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm text-moon-100/85">
+                  <span className="mt-0.5 text-peach-300">
+                    <Check />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex-1" />
+
+            <a
+              href="#sam-waiting"
+              className="mt-8 inline-flex items-center justify-center rounded-md bg-moon-100 px-4 py-3 text-sm font-medium text-night-950 transition hover:bg-peach-200"
+            >
+              Upgrade now
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
   );
 }

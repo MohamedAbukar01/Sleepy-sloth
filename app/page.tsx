@@ -1,13 +1,12 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { ProblemStats } from "@/components/ProblemStats";
+import { PhoneWontStop } from "@/components/PhoneWontStop";
 import { HowItWorks } from "@/components/HowItWorks";
-import { Features } from "@/components/Features";
-import { CompareTable } from "@/components/CompareTable";
+import { WhyGuilt } from "@/components/WhyGuilt";
+import { SeeInside } from "@/components/SeeInside";
 import { Pricing } from "@/components/Pricing";
-import { Testimonials } from "@/components/Testimonials";
-import { FAQ } from "@/components/FAQ";
-import { WaitlistCTA } from "@/components/WaitlistCTA";
+import { SamWaiting } from "@/components/SamWaiting";
+import { HearFromSam } from "@/components/HearFromSam";
 import { Footer } from "@/components/Footer";
 
 export default function Page() {
@@ -16,14 +15,13 @@ export default function Page() {
       <Navbar />
       <main>
         <Hero />
-        <ProblemStats />
+        <PhoneWontStop />
         <HowItWorks />
-        <Features />
-        <CompareTable />
+        <WhyGuilt />
+        <SeeInside />
         <Pricing />
-        <Testimonials />
-        <FAQ />
-        <WaitlistCTA />
+        <SamWaiting />
+        <HearFromSam />
       </main>
       <Footer />
     </>
